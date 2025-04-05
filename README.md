@@ -1,4 +1,4 @@
-# BookingApp
+# GenericCalendarApp
 
 A flexible, extensible calendar booking system built with .NET 9 (or .NET 10 preview), using Clean Architecture, CQRS, and vertical slicing.
 
