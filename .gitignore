@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/GenericCalendar.Api/appsettings.Development.json
+/GenericCalendar.Api/Properties/launchSettings.json
