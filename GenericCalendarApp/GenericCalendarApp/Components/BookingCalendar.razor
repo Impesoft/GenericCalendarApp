@@ -1,0 +1,33 @@
+@using GenericCalendar.Application.Bookings.GetBookingsForRange
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using GenericCalendarApp.Services
+@inject IBookingApiClient BookingApi
+<h3>Upcoming Bookings</h3>
+@if (Bookings == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <QuickGrid TGridItem="BookingDto" Items="@Bookings" Class="table table-striped">
+        <PropertyColumn Property="@(b => b.Title)" Title="Title" />
+        <PropertyColumn Property="@(b => b.Start)" Title="Start" Format="yyyy-MM-dd HH:mm" />
+        <PropertyColumn Property="@(b => b.End)" Title="End" Format="yyyy-MM-dd HH:mm" />
+        <PropertyColumn Property="@(b => b.Type)" Title="Type" />
+@*         <Column Title="Color">
+            <Template Context="b">
+                <span style="display:inline-block;width:20px;height:20px;background:@b.Color;border-radius:4px;"></span>
+            </Template>
+        </Column> *@
+        <PropertyColumn Property="@(b => b.Organizer)" Title="Organizer" />
+    </QuickGrid>
+}
+
+@code {
+public IQueryable<BookingDto>? Bookings;
+protected override async Task OnInitializedAsync()
+    {
+        var today = DateTime.Today;
+        Bookings = (await BookingApi.GetBookingsAsync(today.AddDays(-7), today.AddDays(14))).AsQueryable();
+    }
+ }

@@ -22,6 +22,9 @@ BookingApp.sln
 
 ---
 
+
+---
+
 ## 📁 Key Concepts
 
 ### Domain (Pure Business Logic)
