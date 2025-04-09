@@ -1,6 +1,6 @@
 # GenericCalendarApp
 
-A flexible, extensible calendar booking system built with .NET 9 (or .NET 10 preview), using Clean Architecture, CQRS, and vertical slicing.
+A flexible, extensible calendar booking system built with .NET 10, using Clean Architecture, CQRS, and vertical slicing.
 
 ---
 
@@ -77,7 +77,7 @@ dotnet run
 
 4. **Visit the calendar UI**
 ```
-http://localhost:5000 (or whatever port Blazor binds to)
+http://localhost:5179
 ```
 
 ---

@@ -3,6 +3,7 @@ using GenericCalendar.Application.Abstractions;
 using GenericCalendar.Application.Bookings.BookItem;
 using GenericCalendar.Application.Bookings.GetBookingsForRange;
 using GenericCalendar.Application.Shared;
+using GenericCalendar.Domain.Interfaces;
 using GenericCalendar.Domain.Messaging;
 using GenericCalendar.Infrastructure.Persistence;
 using GenericCalendar.Infrastructure.Services;
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<GenericCalendarDbContext>(options =>
 builder.Services.AddScoped<IDispatcher, Dispatcher>();
 builder.Services.AddScoped<IBookingWriter, BookingWriter>();
 builder.Services.AddScoped<IBookingReader, BookingReader>();
+builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 
 // Handler registration (if using reflection-free DI)
 builder.Services.AddScoped<IRequestHandler<BookItemRequest, BookingResult>, BookItemHandler>();
@@ -33,6 +35,7 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var db = scope.ServiceProvider.GetRequiredService<GenericCalendarDbContext>();
+db.Database.Migrate();
 //db.Database.EnsureCreated();        // ✅ ← Add this if missing
 //DataSeeder.Seed(db);               // ✅ ← Optional
 

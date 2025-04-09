@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /GenericCalendar.Api/appsettings.Development.json
 /GenericCalendar.Api/Properties/launchSettings.json
+/GenericCalendar.Api/calendar.db-shm
+/GenericCalendar.Api/calendar.db-wal
