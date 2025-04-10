@@ -1,5 +1,32 @@
 ﻿@page "/calendar"
 @page "/"
+@using GenericCalendarApp.Components.Pages.Calendar
+@using GenericCalendarApp.Components.Enums;
+@rendermode InteractiveServer
+
 <PageTitle>Calendar</PageTitle>
 
+<CalendarViewSwitcher CurrentView="@currentView" OnViewChange="SwitchView" />
+
 <BookingCalendar />
+@switch (currentView)
+{
+    case CalendarView.Month:
+        <MonthView />
+        break;
+    case CalendarView.Week:
+        <WeekView />
+        break;
+    case CalendarView.Day:
+        <DayView />
+        break;
+}
+@code {
+    private CalendarView currentView = CalendarView.Month;
+
+    private void SwitchView(CalendarView view)
+    {
+        currentView = view;
+        // TODO: Render appropriate calendar view component
+    }
+}

@@ -1,0 +1,89 @@
+﻿@using GenericCalendar.Application.Bookings.GetBookingsForRange
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using GenericCalendarApp.Services 
+
+@inject IBookingApiClient BookingApi
+
+<div class="calendar-month-view">
+    <h2>Month View</h2>
+
+
+    <div class="calendar-header">
+        <FluentIcon Value="new Icons.Regular.Size24.ChevronLeft()" OnClick="PreviousMonth" />
+        <h2>@CurrentMonth.ToString("MMMM yyyy")</h2>
+        <FluentIcon Value="new Icons.Regular.Size24.ChevronRight()" OnClick="NextMonth" />
+    </div>
+
+    <div class="calendar-grid">
+        @foreach (var dayName in DayNames)
+        {
+            <div class="calendar-day-name">@dayName</div>
+        }
+
+        @foreach (var day in DaysInView)
+        {
+            var bookingsForDay = Bookings?.Where(b => b.Start.Date == day.Date).ToList() ?? new();
+            <div class="calendar-cell @GetDayClasses(day)">
+                <div class="day-number">@day.Day</div>
+                @foreach (var booking in bookingsForDay)
+                {
+                    <div class="booking" style="background-color: @(booking.Color ?? "#ccc")">
+                        @booking.Title
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+</div>
+
+@code {
+    private DateTime CurrentMonth = DateTime.Today;
+    private List<DateTime> DaysInView = new();
+    private static readonly string[] DayNames = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+
+    public IQueryable<BookingDto>? Bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookings();
+    }
+
+    private async Task LoadBookings()
+    {
+        var startOfGrid = StartOfWeek(new DateTime(CurrentMonth.Year, CurrentMonth.Month, 1)).AddDays(-7);
+        var endOfGrid = startOfGrid.AddDays(6 * 7);
+        Bookings = (await BookingApi.GetBookingsAsync(startOfGrid, endOfGrid)).AsQueryable();
+
+        DaysInView = Enumerable.Range(0, 6 * 7).Select(offset => startOfGrid.AddDays(offset)).ToList();
+    }
+
+    private DateTime StartOfWeek(DateTime date)
+    {
+        int diff = (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
+        return date.AddDays(-1 * diff).Date;
+    }
+
+    private string GetDayClasses(DateTime date)
+    {
+        var classes = new List<string>();
+        if (date.Date == DateTime.Today.Date)
+            classes.Add("today");
+        if (date.Month != CurrentMonth.Month)
+            classes.Add("other-month");
+        return string.Join(" ", classes);
+    }
+
+    private async Task PreviousMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(-1);
+        await LoadBookings();
+    }
+
+    private async Task NextMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(1);
+        await LoadBookings();
+    }
+}
+

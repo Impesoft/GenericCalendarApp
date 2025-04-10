@@ -1,0 +1,71 @@
+﻿@using GenericCalendar.Application.Bookings.GetBookingsForRange
+@using GenericCalendarApp.Services
+@inject IBookingApiClient BookingApi
+
+<div class="calendar-week-view">
+    <div class="calendar-header">
+        <FluentIcon Value="new Icons.Regular.Size24.ChevronLeft()" OnClick="PreviousWeek" />
+        <h2>@WeekStart.ToString("dd MMM") - @WeekEnd.ToString("dd MMM yyyy")</h2>
+        <FluentIcon Value="new Icons.Regular.Size24.ChevronRight()" OnClick="NextWeek" />
+    </div>
+
+    <div class="calendar-grid week">
+        @foreach (var day in WeekDays)
+        {
+            var bookingsForDay = Bookings?.Where(b => b.Start.Date == day.Date).ToList() ?? new();
+            <div class="calendar-cell @GetDayClasses(day)">
+                <div class="day-header">@day.ToString("dddd dd")</div>
+                @foreach (var booking in bookingsForDay)
+                {
+                    <div class="booking" style="background-color: @(booking.Color ?? "#ccc")">
+                        @booking.Title (@booking.Start:HH:mm - @booking.End:HH:mm)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private DateTime WeekStart = StartOfWeek(DateTime.Today);
+    private DateTime WeekEnd => WeekStart.AddDays(6);
+    private List<DateTime> WeekDays = new();
+    public IQueryable<BookingDto>? Bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookings();
+    }
+
+    private async Task LoadBookings()
+    {
+        WeekDays = Enumerable.Range(0, 7).Select(offset => WeekStart.AddDays(offset)).ToList();
+        Bookings = (await BookingApi.GetBookingsAsync(WeekStart, WeekEnd)).AsQueryable();
+    }
+
+    private static DateTime StartOfWeek(DateTime date)
+    {
+        int diff = (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
+        return date.AddDays(-diff).Date;
+    }
+
+    private async Task PreviousWeek()
+    {
+        WeekStart = WeekStart.AddDays(-7);
+        await LoadBookings();
+    }
+
+    private async Task NextWeek()
+    {
+        WeekStart = WeekStart.AddDays(7);
+        await LoadBookings();
+    }
+
+    private string GetDayClasses(DateTime date)
+    {
+        var classes = new List<string>();
+        if (date.Date == DateTime.Today.Date)
+            classes.Add("today");
+        return string.Join(" ", classes);
+    }
+}

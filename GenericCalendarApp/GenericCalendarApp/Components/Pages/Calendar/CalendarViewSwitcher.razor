@@ -1,0 +1,28 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using GenericCalendarApp.Components.Enums
+
+<div class="flex gap-2">
+    @foreach (var view in OtherViews)
+    {
+        <FluentIcon OnClick="() => OnViewChange.InvokeAsync(view)" Value="@GetIcon(view)" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public CalendarView CurrentView { get; set; }
+
+    [Parameter]
+    public EventCallback<CalendarView> OnViewChange { get; set; }
+
+    private IEnumerable<CalendarView> OtherViews =>
+        Enum.GetValues<CalendarView>().Where(v => v != CurrentView);
+
+    private static Icon GetIcon(CalendarView view) => view switch
+    {
+        CalendarView.Month => new Icons.Regular.Size28.CalendarMonth(),
+        CalendarView.Week => new Icons.Regular.Size28.CalendarWorkWeek(),
+        CalendarView.Day => new Icons.Regular.Size28.CalendarDay(),
+        _ => new Icons.Regular.Size28.CalendarLtr()
+    };
+}

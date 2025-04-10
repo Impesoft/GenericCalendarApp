@@ -1,6 +1,7 @@
 ﻿using GenericCalendarApp.Client.Pages;
 using GenericCalendarApp.Components;
 using GenericCalendarApp.Services;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddHttpClient<IBookingApiClient, BookingApiClient>(client =>
 {
     client.BaseAddress = new Uri(apiBaseUrl);
 });
+
+builder.Services.AddFluentUIComponents();
 
 var app = builder.Build();
 

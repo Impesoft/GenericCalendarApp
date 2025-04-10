@@ -1,0 +1,38 @@
+.week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.week-day-cell {
+    min-height: 120px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    position: relative;
+}
+
+    .week-day-cell.today {
+        border: 2px solid #0078d4;
+    }
+
+.day-label {
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.week-booking {
+    font-size: 0.75rem;
+    color: white;
+    padding: 2px 4px;
+    margin-top: 2px;
+    border-radius: 3px;
+}

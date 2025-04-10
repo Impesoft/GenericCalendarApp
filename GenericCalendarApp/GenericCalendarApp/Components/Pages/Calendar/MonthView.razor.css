@@ -1,0 +1,49 @@
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day-name {
+    font-weight: bold;
+    text-align: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.calendar-cell {
+    min-height: 100px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+}
+
+    .calendar-cell.today {
+        border: 2px solid #0078d4;
+    }
+
+    .calendar-cell.other-month {
+        background-color: #f3f3f3;
+    }
+
+.day-number {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.booking {
+    font-size: 0.75rem;
+    color: white;
+    padding: 2px 4px;
+    margin-top: 2px;
+    border-radius: 3px;
+}

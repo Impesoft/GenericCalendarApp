@@ -20,7 +20,7 @@ public class BookingReader : IBookingReader
     {
         var bookings = await _db.Bookings
             .Include(b => b.Item)
-            .Where(b => b.Start < to && b.End > from)
+            .Where(b => b.Start <= to && b.End >= from)
             .ToListAsync();
 
         var result = bookings.Select(b => new BookingDto

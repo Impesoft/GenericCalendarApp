@@ -1,0 +1,55 @@
+﻿@using GenericCalendar.Application.Bookings.GetBookingsForRange
+@using GenericCalendarApp.Services
+@inject IBookingApiClient BookingApi
+
+<div class="calendar-day-view">
+    <div class="calendar-header">
+        <FluentIcon Value="new Icons.Regular.Size24.ChevronLeft()" OnClick="PreviousDay" />
+        <h2>@CurrentDay.ToString("dddd dd MMM yyyy")</h2>
+        <FluentIcon Value="new Icons.Regular.Size24.ChevronRight()" OnClick="NextDay" />
+    </div>
+
+    <div class="calendar-day-content">
+        @if (Bookings?.Any() == true)
+        {
+            @foreach (var booking in Bookings.OrderBy(b => b.Start))
+            {
+                <div class="booking" style="background-color: @(booking.Color ?? "#ccc")">
+                    <strong>@booking.Title</strong><br />
+                    @booking.Start:HH:mm - @booking.End:HH:mm
+                </div>
+            }
+        }
+        else
+        {
+            <div><em>No bookings for today.</em></div>
+        }
+    </div>
+</div>
+
+@code {
+    private DateTime CurrentDay = DateTime.Today;
+    public IQueryable<BookingDto>? Bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBookings();
+    }
+
+    private async Task LoadBookings()
+    {
+        Bookings = (await BookingApi.GetBookingsAsync(CurrentDay, CurrentDay)).AsQueryable();
+    }
+
+    private async Task PreviousDay()
+    {
+        CurrentDay = CurrentDay.AddDays(-1);
+        await LoadBookings();
+    }
+
+    private async Task NextDay()
+    {
+        CurrentDay = CurrentDay.AddDays(1);
+        await LoadBookings();
+    }
+}
