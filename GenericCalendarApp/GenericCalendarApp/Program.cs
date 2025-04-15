@@ -1,4 +1,4 @@
-﻿using GenericCalendarApp.Client.Pages;
+﻿using GenericCalendarApp.Client;
 using GenericCalendarApp.Components;
 using GenericCalendarApp.Services;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -36,10 +36,11 @@ else
 
 app.UseAntiforgery();
 
-app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(GenericCalendarApp.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(typeof(GenericCalendarApp.Client.Pages.Counter).Assembly);
+
+app.MapStaticAssets();
 
 app.Run();

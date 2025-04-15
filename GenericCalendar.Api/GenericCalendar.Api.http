@@ -4,3 +4,7 @@ GET {{GenericCalendar.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+GET {{GenericCalendar.Api_HostAddress}}/api/bookings
+
+###

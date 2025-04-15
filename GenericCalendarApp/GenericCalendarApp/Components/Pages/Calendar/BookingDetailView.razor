@@ -1,0 +1,86 @@
+﻿@using GenericCalendar.Application.Bookings.GetBookingsForRange
+@using GenericCalendarApp.Services
+@inject IBookingApiClient BookingApiClient
+@rendermode InteractiveServer
+
+<div class="booking-grid-container">
+    <div class="grid-header-bar">
+        <FluentButton @onclick="() => OpenCreateModal()" Style="z-index: 9999;">
+
+            <FluentIcon Value="new Icons.Regular.Size24.Add()"
+                        class="add-booking-icon"
+                        style="float:right; top: 50px; right:5rem;"
+                        Title="Add Booking" />
+        </FluentButton>
+    </div>
+    <FluentDataGrid Items="@bookings"
+                    GridLines="true"
+                    Class="booking-grid"
+                    RowStyle="@GetRowStyle"
+                    TGridItem="BookingDto">
+        <PropertyColumn Title="Title" Property="b => b.Title" />
+        <PropertyColumn Title="Type" Property="b => b.Type" />
+        <PropertyColumn Title="Time" Property='b => $" {b.Start:HH:mm} – {b.End:HH:mm}"' />
+        <PropertyColumn Title="Organizer" Property="b => b.Organizer" />
+        <PropertyColumn Title="Participants" Property='b => string.Join(" , ", b.Participants ?? new())' />
+        <TemplateColumn Title="Actions">
+            <FluentIcon Value="new Icons.Regular.Size24.Edit()" @onclick="() => OnEdit(context)" />
+            <FluentIcon Value="new Icons.Regular.Size24.Delete()" @onclick="() => OnDelete(context)" />
+        </TemplateColumn>
+
+    </FluentDataGrid>
+</div>
+
+@code {
+    [Parameter] public DateOnly? SelectedDate { get; set; }
+
+    private IQueryable<BookingDto>? bookings;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (SelectedDate is not null)
+        {
+            var dayStart = SelectedDate.Value.ToDateTime(TimeOnly.MinValue); // 00:00
+            var dayEnd = SelectedDate.Value.ToDateTime(TimeOnly.MaxValue);   // 23:59:59.999...
+
+            var allBookings = await BookingApiClient.GetBookingsAsync(dayStart, dayEnd);
+
+            // Only include bookings that overlap with this day
+            bookings = allBookings
+                .Where(b => b.End >= dayStart && b.Start <= dayEnd)
+                .OrderBy(b => b.Start)
+                .AsQueryable();
+        }
+    }
+    private string GetRowStyle(BookingDto booking)
+    {
+        var color = string.IsNullOrWhiteSpace(booking.Color) ? "#f9f9f9" : booking.Color;
+        return $"background-color: color-mix(in srgb, {color} 10%, white)";
+    }
+    private void OnEdit(BookingDto booking)
+    {
+        // TODO: implement edit logic
+    }
+
+    private void OnDelete(BookingDto booking)
+    {
+        // TODO: implement delete logic
+    }
+    private void OpenCreateModal()
+    {
+            var activeDate = SelectedDate?.ToDateTime(TimeOnly.Parse(string.Format("{0:HH:mm:ss tt}", DateTime.Now))) ?? DateTime.Now;
+            var newBooking = new BookingDto
+            {
+                Start = activeDate,
+                End =  activeDate.AddHours(1),
+                Title = "New Booking",
+                Type = "Meeting",
+                Organizer = "You",
+                Participants = new List<string> { "Participant 1", "Participant 2" }
+            };
+            bookings = (bookings ?? Enumerable.Empty<BookingDto>())
+                .Append(newBooking)
+                .AsQueryable();
+                // TODO: implement create logic
+                StateHasChanged();    }
+}

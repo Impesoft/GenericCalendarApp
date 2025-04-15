@@ -1,12 +1,11 @@
 ﻿@using GenericCalendar.Application.Bookings.GetBookingsForRange
 @using Microsoft.AspNetCore.Components.QuickGrid
-@using GenericCalendarApp.Services 
+@using GenericCalendarApp.Services
 
 @inject IBookingApiClient BookingApi
 
 <div class="calendar-month-view">
     <h2>Month View</h2>
-
 
     <div class="calendar-header">
         <FluentIcon Value="new Icons.Regular.Size24.ChevronLeft()" OnClick="PreviousMonth" />
@@ -23,7 +22,8 @@
         @foreach (var day in DaysInView)
         {
             var bookingsForDay = Bookings?.Where(b => b.Start.Date == day.Date).ToList() ?? new();
-            <div class="calendar-cell @GetDayClasses(day)">
+
+            <div class="calendar-cell @GetDayClasses(day)" @onclick="@(() => OpenModal(day))">
                 <div class="day-number">@day.Day</div>
                 @foreach (var booking in bookingsForDay)
                 {
@@ -34,8 +34,9 @@
             </div>
         }
     </div>
-
 </div>
+
+<BookingModal @ref="bookingModal" SelectedDate="modalDate" />
 
 @code {
     private DateTime CurrentMonth = DateTime.Today;
@@ -43,6 +44,9 @@
     private static readonly string[] DayNames = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 
     public IQueryable<BookingDto>? Bookings;
+
+    private BookingModal? bookingModal;
+    private DateOnly modalDate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,5 +89,13 @@
         CurrentMonth = CurrentMonth.AddMonths(1);
         await LoadBookings();
     }
-}
 
+    private async Task OpenModal(DateTime date)
+    {
+        modalDate = DateOnly.FromDateTime(date);
+        if (bookingModal is not null)
+        {
+            await bookingModal.OpenAsync(modalDate);
+        }
+    }
+}

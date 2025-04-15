@@ -1,0 +1,27 @@
+.booking-dialog {
+    min-width: fit-content;
+    min-height: fit-content;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+    padding: 1rem;
+    border: 2px solid black;
+}
+
+.close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    z-index: 20;
+    padding: 0.25rem;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+    .close-button:hover {
+        background-color: #eee;
+    }

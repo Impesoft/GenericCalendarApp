@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -23,6 +23,12 @@
 		<ProjectReference Include="..\..\GenericCalendar.Domain\GenericCalendar.Domain.csproj" />
 		<ProjectReference Include="..\GenericCalendarApp.Client\GenericCalendarApp.Client.csproj" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="wwwroot\js\BookingModal.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 </Project>

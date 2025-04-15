@@ -41,7 +41,7 @@ public class BookingReader : IBookingReader
     {
         BookingType.Room => "#0078D4",
         BookingType.Seat => "#107C10",
-        BookingType.TeamMeeting => "#D83B01",
+        BookingType.TeamsMeeting => "#D83B01",
         BookingType.Appointment => "#5C2D91",
         _ => "#8A8886"
     };

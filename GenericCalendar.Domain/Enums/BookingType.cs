@@ -6,7 +6,7 @@ public enum BookingType
     Seat,
     Equipment,
     Meeting,
-    TeamMeeting,
+    TeamsMeeting,
     Appointment,
     Flight,
     Custom

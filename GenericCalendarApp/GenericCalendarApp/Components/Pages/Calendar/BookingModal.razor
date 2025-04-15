@@ -1,0 +1,47 @@
+﻿@implements IAsyncDisposable
+@rendermode InteractiveServer
+
+<dialog @ref="dialogRef" class="booking-dialog">
+    <button class="close-button" @onclick="Close">✕</button>
+
+    <h3>Bookings for @SelectedDate.ToShortDateString()</h3>
+
+    <BookingDetailView SelectedDate="SelectedDate" />
+</dialog>
+
+@code {
+    private ElementReference dialogRef;
+    private IJSObjectReference? _module;
+
+    [Parameter] public DateOnly SelectedDate { get; set; }
+
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        _module ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/BookingModal.js");        
+    }
+
+    public async Task OpenAsync(DateOnly selectedDate)
+    {
+        SelectedDate = selectedDate;
+
+        await _module.InvokeVoidAsync("showDialog", dialogRef);
+    }
+
+    public async Task Close()
+    {
+        if (_module != null)
+        {
+            await _module.InvokeVoidAsync("closeDialog", dialogRef);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module is not null)
+        {
+            await _module.DisposeAsync();
+        }
+    }
+}
