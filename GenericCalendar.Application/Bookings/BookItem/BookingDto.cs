@@ -1,4 +1,6 @@
-﻿namespace GenericCalendar.Application.Bookings.GetBookingsForRange;
+﻿using GenericCalendar.Domain.Enums;
+
+namespace GenericCalendar.Application.Bookings.BookItem;
 
 public class BookingDto
 {
@@ -6,9 +8,6 @@ public class BookingDto
     public string Title { get; set; } = string.Empty;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public string Type { get; set; } = string.Empty;
+    public BookingType Type { get; set; } = BookingType.None;
     public string Color { get; set; } = string.Empty;
-
-    public string? Organizer { get; set; }
-    public List<string>? Participants { get; set; }
 }

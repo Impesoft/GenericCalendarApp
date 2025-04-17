@@ -1,0 +1,22 @@
+﻿@using GenericCalendar.Application.Bookings.RoomBookings
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApi
+
+<h3>EditRoomBooking</h3>
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit">
+    <FluentTextField @bind-Value="Booking.Title" Label="Title" />
+    <FluentNumberField @bind-Value="Booking.Floor" Label="Floor" />
+    <FluentNumberField @bind-Value="Booking.Capacity" Label="Capacity" />
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public RoomBookingDto Booking { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+       // await Dispatcher.DispatchAsync(new UpdateRoomBookingCommand(Booking));
+        Navigation.NavigateTo("/calendar");
+    }
+}

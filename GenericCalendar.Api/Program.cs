@@ -1,14 +1,10 @@
 ﻿using GenericCalendar.Api.Endpoints;
-using GenericCalendar.Application.Abstractions;
 using GenericCalendar.Application.Bookings.BookItem;
 using GenericCalendar.Application.Bookings.GetBookingsForRange;
-using GenericCalendar.Application.Shared;
-using GenericCalendar.Domain.Interfaces;
 using GenericCalendar.Domain.Messaging;
+using GenericCalendar.Infrastructure;
 using GenericCalendar.Infrastructure.Persistence;
-using GenericCalendar.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,10 +13,7 @@ builder.Services.AddDbContext<GenericCalendarDbContext>(options =>
     options.UseSqlite("Data Source=calendar.db")); // change provider as needed
 
 // CQRS core
-builder.Services.AddScoped<IDispatcher, Dispatcher>();
-builder.Services.AddScoped<IBookingWriter, BookingWriter>();
-builder.Services.AddScoped<IBookingReader, BookingReader>();
-builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
+builder.Services.AddInfrastructure();
 
 // Handler registration (if using reflection-free DI)
 builder.Services.AddScoped<IRequestHandler<BookItemRequest, BookingResult>, BookItemHandler>();

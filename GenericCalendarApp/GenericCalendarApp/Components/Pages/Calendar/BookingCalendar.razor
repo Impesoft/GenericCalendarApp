@@ -1,3 +1,4 @@
+@using GenericCalendar.Application.Bookings.BookItem
 @using GenericCalendar.Application.Bookings.GetBookingsForRange
 @using GenericCalendarApp.Services
 @using Microsoft.AspNetCore.Components.QuickGrid
@@ -14,13 +15,12 @@ else
         <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(b => b.Title)" Title="Title" />
         <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(b => b.Start)" Title="Start" Format="yyyy-MM-dd HH:mm" />
         <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(b => b.End)" Title="End" Format="yyyy-MM-dd HH:mm" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(b => b.Type)" Title="Type" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(b => b.Type.ToString())" Title="Type" />
 @*         <Column Title="Color">
             <Template Context="b">
                 <span style="display:inline-block;width:20px;height:20px;background:@b.Color;border-radius:4px;"></span>
             </Template>
         </Column> *@
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(b => b.Organizer)" Title="Organizer" />
     </QuickGrid>
 }
 

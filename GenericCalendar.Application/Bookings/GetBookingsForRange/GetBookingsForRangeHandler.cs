@@ -1,4 +1,5 @@
 ﻿using GenericCalendar.Application.Abstractions;
+using GenericCalendar.Application.Bookings.BookItem;
 using GenericCalendar.Domain.Messaging;
 
 namespace GenericCalendar.Application.Bookings.GetBookingsForRange;

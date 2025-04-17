@@ -1,0 +1,56 @@
+﻿@page "/bookings/edit/{BookingId:guid}"
+@using GenericCalendar.Application.Bookings.BookItem
+@using GenericCalendar.Application.Bookings.GetBookingById
+@using GenericCalendar.Application.Bookings.RoomBookings
+@using GenericCalendar.Application.Bookings.SeatBookings
+@using GenericCalendar.Application.Bookings.TeamsMeetings
+@using GenericCalendar.Application.Shared
+@using GenericCalendar.Domain.Contracts
+@using GenericCalendar.Domain.Enums
+@using GenericCalendar.Domain.Interfaces
+@using GenericCalendarApp.Services
+@inject IBookingApiClient BookingApi
+
+@if (booking is not null)
+{
+    <DynamicComponent Type="@componentType" Parameters="@parameters" />
+}
+else
+{
+    <p>Loading booking details...</p>
+}
+
+@code
+{
+    [Parameter, EditorRequired]
+    public required Guid BookingId { get; set; }
+
+    private BookingDto? booking;
+    private Type? componentType;
+    private Dictionary<string, object>? parameters;
+
+    protected override async Task OnInitializedAsync()
+    {
+        booking = await BookingApi.GetBookingByIdAsync(BookingId);
+
+
+        componentType = booking.Type switch
+        {
+            BookingType.Meeting => typeof(EditMeetingBooking),
+            BookingType.Seat => typeof(EditSeatBooking),
+            BookingType.Room => typeof(EditRoomBooking),
+            _ => throw new NotImplementedException($"Edit view not implemented for booking type '{booking.Type}'")
+        };
+
+        parameters = new()
+        {
+            ["Booking"] = booking switch
+            {
+                MeetingBookingDto m => m,
+                SeatBookingDto s => s,
+                RoomBookingDto r => r,
+                _ => throw new InvalidOperationException("Unsupported booking type")
+            }
+        };
+    }
+}

@@ -1,6 +1,11 @@
-﻿using GenericCalendar.Application.Bookings.GetBookingsForRange;
-using GenericCalendar.Application.Bookings.BookItem;
+﻿using GenericCalendar.Application.Bookings.BookItem;
+using GenericCalendar.Application.Bookings.GetBookingById;
+using GenericCalendar.Application.Bookings.GetBookingsForRange;
+using GenericCalendar.Application.Bookings.RoomBookings;
+using GenericCalendar.Application.Bookings.SeatBookings;
+using GenericCalendar.Application.Bookings.TeamsMeetings;
 using GenericCalendar.Application.Shared;
+using GenericCalendar.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericCalendar.Api.Endpoints;
@@ -10,6 +15,21 @@ public static class BookingsApi
     public static void MapBookingsApi(this IEndpointRouteBuilder endpoints)
     {
         var group = endpoints.MapGroup("/api/bookings");
+        group.MapGet("/{id:guid}", async (Guid id, IDispatcher dispatcher) =>
+        {
+            var result = await dispatcher.SendAsync(new GetBookingByIdQuery(id));
+
+            if (result is null)
+                return Results.NotFound();
+
+            return result.Type switch
+            {
+                BookingType.Meeting => Results.Ok((MeetingBookingDto)result),
+                BookingType.Seat => Results.Ok((SeatBookingDto)result),
+                BookingType.Room => Results.Ok((RoomBookingDto)result),
+                _ => Results.Ok(result) // fallback to base BookingDto
+            };
+        });
 
         group.MapGet("/", async (
             [FromQuery] DateTime from,

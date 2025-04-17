@@ -1,4 +1,5 @@
-﻿using GenericCalendarApp.Client;
+﻿using GenericCalendar.Application.Shared;
+using GenericCalendarApp.Client;
 using GenericCalendarApp.Components;
 using GenericCalendarApp.Services;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
 var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? "http://localhost:5000";
 builder.Services.AddHttpClient<IBookingApiClient, BookingApiClient>(client =>
 {

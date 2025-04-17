@@ -1,0 +1,34 @@
+﻿@using GenericCalendar.Application.Bookings.BookItem
+@using GenericCalendar.Application.Bookings.TeamsMeetings
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApi
+
+<h3>EditMeetingBooking</h3>
+
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit" novalidate>
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentTextField Name="Title" @bind-Value="Booking.Title" Label="Title" />
+    <FluentTextField Name="Organizer" @bind-Value="Booking.Organizer" Label="Organizer" />
+    <FluentTextArea Name="Participants" @bind-Value="ParticipantList" Label="Participants (comma-separated)" />
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public MeetingBookingDto Booking { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        //await BookingApiClient.UpdateMeetingBookingAsync(Booking));
+        Navigation.NavigateTo("/calendar");
+    }
+    private string ParticipantList
+    {
+        get => string.Join(", ", Booking.Participants ?? []);
+        set => Booking.Participants = value
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .ToList();
+    }
+}

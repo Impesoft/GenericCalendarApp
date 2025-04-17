@@ -1,6 +1,9 @@
-﻿@using GenericCalendar.Application.Bookings.GetBookingsForRange
+﻿@using GenericCalendar.Application.Bookings.BookItem
+@using GenericCalendar.Application.Bookings.GetBookingsForRange
 @using GenericCalendarApp.Services
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @inject IBookingApiClient BookingApiClient
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <div class="booking-grid-container">
@@ -18,13 +21,39 @@
                     Class="booking-grid"
                     RowStyle="@GetRowStyle"
                     TGridItem="BookingDto">
-        <PropertyColumn Title="Title" Property="b => b.Title" />
-        <PropertyColumn Title="Type" Property="b => b.Type" />
-        <PropertyColumn Title="Time" Property='b => $" {b.Start:HH:mm} – {b.End:HH:mm}"' />
-        <PropertyColumn Title="Organizer" Property="b => b.Organizer" />
-        <PropertyColumn Title="Participants" Property='b => string.Join(" , ", b.Participants ?? new())' />
+
+        @if (!editing)
+        {
+            <PropertyColumn Title="Title" Property="b => b.Title" />
+            <PropertyColumn Title="Type" Property="b => b.Type" />
+            <PropertyColumn Title="Time" Property='b => $" {b.Start:HH:mm} – {b.End:HH:mm}"' />
+        }
+
+        @if (editing)
+        {
+            <TemplateColumn Title="Name">
+                <FluentTextField @bind-Value="context!.Title" />
+            </TemplateColumn>
+            <PropertyColumn Title="Time" Property='b => $" {b.Start:HH:mm} – {b.End:HH:mm}"' />
+            @* SelectMode: Range *@
+            <FluentGridItem>
+                <FluentLabel>Range</FluentLabel>
+                <FluentCalendar DisabledDateFunc="@DisabledDay"
+                                @bind-SelectedDates="@SelectedRange"
+                                SelectMode="CalendarSelectMode.Range" />
+                <p>Selected days: @DisplaySelectedDays(SelectedRange)</p>
+            </FluentGridItem>
+        }
         <TemplateColumn Title="Actions">
-            <FluentIcon Value="new Icons.Regular.Size24.Edit()" @onclick="() => OnEdit(context)" />
+            @if (!editing)
+            {
+                <FluentIcon Value="new Icons.Regular.Size24.Edit()" @onclick="() => OnEdit(context)" />
+            }
+            @if (editing)
+            {
+                <FluentIcon Value="new Icons.Regular.Size24.Save()" @onclick="() => OnSave(context)" />
+            }
+
             <FluentIcon Value="new Icons.Regular.Size24.Delete()" @onclick="() => OnDelete(context)" />
         </TemplateColumn>
 
@@ -35,6 +64,29 @@
     [Parameter] public DateOnly? SelectedDate { get; set; }
 
     private IQueryable<BookingDto>? bookings;
+    private bool editing;
+
+    // private DateTime? SelectedDay = null;
+    private IEnumerable<DateTime> SelectedRange = new List<DateTime>();
+    private IEnumerable<DateTime> SelectedRangeCustomized = new List<DateTime>();
+    private IEnumerable<DateTime> SelectedDays = new List<DateTime>();
+    private IEnumerable<DateTime> SelectedDaysCustomized = new List<DateTime>();
+    // Disable all days with the day number 3, 8, and 20.
+    private bool DisabledDay(DateTime date) => date.Day == 3 || date.Day == 8 || date.Day == 20;
+
+    // Display the selected days in a list.
+    private RenderFragment DisplaySelectedDays(IEnumerable<DateTime> days) => builder =>
+    {
+        builder.OpenElement(0, "ul");
+        foreach (var day in days)
+        {
+            builder.OpenElement(1, "li");
+            builder.AddContent(2, day.ToShortDateString());
+            builder.CloseElement();
+        }
+        builder.CloseElement();
+    };
+
 
     protected override async Task OnParametersSetAsync()
     {
@@ -59,28 +111,41 @@
     }
     private void OnEdit(BookingDto booking)
     {
+        //EditBooking(booking);
+        NavigationManager.NavigateTo($"/bookings/edit/{booking.Id}");
+
         // TODO: implement edit logic
     }
-
+    private void OnSave(BookingDto booking)
+    {
+        editing = false;
+        //TODO: Save logic
+    }
     private void OnDelete(BookingDto booking)
     {
         // TODO: implement delete logic
     }
     private void OpenCreateModal()
     {
-            var activeDate = SelectedDate?.ToDateTime(TimeOnly.Parse(string.Format("{0:HH:mm:ss tt}", DateTime.Now))) ?? DateTime.Now;
-            var newBooking = new BookingDto
-            {
-                Start = activeDate,
-                End =  activeDate.AddHours(1),
-                Title = "New Booking",
-                Type = "Meeting",
-                Organizer = "You",
-                Participants = new List<string> { "Participant 1", "Participant 2" }
-            };
-            bookings = (bookings ?? Enumerable.Empty<BookingDto>())
-                .Append(newBooking)
-                .AsQueryable();
-                // TODO: implement create logic
-                StateHasChanged();    }
+        var activeDate = SelectedDate?.ToDateTime(TimeOnly.Parse(string.Format("{0:HH:mm:ss tt}", DateTime.Now))) ?? DateTime.Now;
+        var newBooking = new BookingDto
+        {
+            Start = activeDate,
+            End = activeDate.AddHours(1),
+            Title = "New Booking",
+        };
+        bookings = (bookings ?? Enumerable.Empty<BookingDto>())
+            .Append(newBooking)
+            .AsQueryable();
+        var index = bookings.ToList().IndexOf(newBooking);
+        var newBookingElement = bookings.ElementAt(index);
+        EditBooking(newBookingElement);
+        // TODO: implement create logic
+        StateHasChanged();
+    }
+    private void EditBooking(BookingDto booking)
+    {
+        editing = true;
+        StateHasChanged();
+    }
 }

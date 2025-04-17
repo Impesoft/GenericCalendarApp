@@ -1,0 +1,27 @@
+﻿@using GenericCalendar.Application.Bookings.BookItem
+@using GenericCalendar.Application.Bookings.SeatBookings
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApiClient
+
+<h3>EditSeatBooking</h3>
+
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit" novalidate>
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentTextField Name="Title" @bind-Value="Booking.Title" Label="Title" />
+    <FluentTextField Name="Row" @bind-Value="Booking.Row" Label="Row" />
+    <FluentNumberField Name="SeatNumber" @bind-Value="Booking.Number" Label="Seat Number" />
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public SeatBookingDto Booking { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        //await BookingApiClient.UpdateBookingAsync(Booking);
+        Navigation.NavigateTo("/calendar");
+    }
+}
