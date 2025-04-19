@@ -1,8 +1,13 @@
 ﻿@page "/bookings/edit/{BookingId:guid}"
 @using GenericCalendar.Application.Bookings.BookItem
+@using GenericCalendar.Application.Bookings.EquipmentBooking
+@using GenericCalendar.Application.Bookings.FlightSeatBooking
 @using GenericCalendar.Application.Bookings.GetBookingById
+@using GenericCalendar.Application.Bookings.InterviewSlotBooking
+@using GenericCalendar.Application.Bookings.ParkingSpotBooking
 @using GenericCalendar.Application.Bookings.RoomBookings
 @using GenericCalendar.Application.Bookings.SeatBookings
+@using GenericCalendar.Application.Bookings.SportsFieldBooking
 @using GenericCalendar.Application.Bookings.TeamsMeetings
 @using GenericCalendar.Application.Shared
 @using GenericCalendar.Domain.Contracts
@@ -42,6 +47,12 @@ else
             BookingType.Meeting => typeof(EditMeetingBooking),
             BookingType.Seat => typeof(EditSeatBooking),
             BookingType.Room => typeof(EditRoomBooking),
+            BookingType.FlightSeat => typeof(EditFlightSeatBooking),
+            BookingType.ParkingSpot => typeof(EditParkingSpotBooking),
+            BookingType.Equipment => typeof(EditEquipmentBooking),
+            // BookingType.Vehicle => typeof(EditVehicleBooking),
+            BookingType.InterviewSlot => typeof(EditInterviewSlotBooking),
+            BookingType.SportsField => typeof(EditSportsFieldBooking),
             _ => throw new NotImplementedException($"Edit view not implemented for booking type '{booking.Type}'")
         };
 
@@ -52,6 +63,12 @@ else
                 MeetingBookingDto m => m,
                 SeatBookingDto s => s,
                 RoomBookingDto r => r,
+                FlightSeatBookingDto f => f,
+                ParkingSpotBookingDto p => p,
+                EquipmentBookingDto e => e,
+                // VehicleBookingDto v => v,
+                InterviewSlotBookingDto i => i,
+                SportsFieldBookingDto s => s,
                 _ => throw new InvalidOperationException("Unsupported booking type")
             }
         };
