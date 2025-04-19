@@ -3,6 +3,7 @@ using System;
 using GenericCalendar.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GenericCalendar.Infrastructure.Migrations
 {
     [DbContext(typeof(GenericCalendarDbContext))]
-    partial class GenericCalendarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418145901_AddMoreSubtypes")]
+    partial class AddMoreSubtypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.0-preview.3.25171.6");
@@ -101,17 +104,17 @@ namespace GenericCalendar.Infrastructure.Migrations
                 {
                     b.HasBaseType("GenericCalendar.Domain.Entities.BookableItemEntity");
 
-                    b.Property<string>("EquipmentType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("RequiresTraining")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasIndex("SerialNumber")

@@ -3,6 +3,7 @@
 @using GenericCalendarApp.Services
 @inject NavigationManager Navigation
 @inject IBookingApiClient BookingApi
+@namespace GenericCalendarApp.Components.Pages.Calendar
 
 <h3>EditMeetingBooking</h3>
 
@@ -17,7 +18,7 @@
 </EditForm>
 
 @code {
-    [Parameter] public MeetingBookingDto Booking { get; set; }
+    [Parameter] public MeetingBookingDto Booking { get; set; } = default!;
 
     private async Task HandleValidSubmit()
     {

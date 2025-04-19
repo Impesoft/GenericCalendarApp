@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace GenericCalendar.Application.Bookings.SeatBookings;
-public class SeatBookingDto : BookingDto
+public class SeatBookingDto : BaseSeatBookingDto
 {
-    public string Row { get; set; } = default!;
-    public int Number { get; set; }
 }

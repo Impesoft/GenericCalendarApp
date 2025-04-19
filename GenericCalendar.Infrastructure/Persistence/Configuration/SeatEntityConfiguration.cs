@@ -10,11 +10,14 @@ public class SeatEntityConfiguration : IEntityTypeConfiguration<SeatEntity>
     {
         builder.ToTable("Seats");
 
-        builder.Property(s => s.Name).IsRequired().HasMaxLength(50);
+        // Configure inherited properties from BaseSeatEntity
         builder.Property(s => s.Row).IsRequired().HasMaxLength(10);
         builder.Property(s => s.Number).IsRequired();
 
-        builder.HasIndex(s => new { s.Row, s.Number }).IsUnique();
+        // Configure properties from BookableItemEntity
+        builder.Property(s => s.Name).IsRequired().HasMaxLength(50);
 
+        // Add unique index for Row and Number
+        builder.HasIndex(s => new { s.Row, s.Number }).IsUnique();
     }
 }

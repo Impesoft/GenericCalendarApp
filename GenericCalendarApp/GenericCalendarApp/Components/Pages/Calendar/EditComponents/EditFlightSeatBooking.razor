@@ -1,0 +1,29 @@
+@using GenericCalendar.Application.Bookings.FlightSeatBooking
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApiClient
+@namespace GenericCalendarApp.Components.Pages.Calendar
+
+<h3>Edit Flight Seat Booking</h3>
+
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit" novalidate>
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentTextField Name="Title" @bind-Value="Booking.Title" Label="Title" />
+    <FluentTextField Name="Row" @bind-Value="Booking.Row" Label="Row" />
+    <FluentNumberField Name="SeatNumber" @bind-Value="Booking.Number" Label="Seat Number" />
+    <FluentTextField Name="FlightNumber" @bind-Value="Booking.FlightNumber" Label="Flight Number" />
+    <FluentTextField Name="SeatClass" @bind-Value="Booking.SeatClass" Label="Seat Class" />
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public FlightSeatBookingDto Booking { get; set; } = default!;
+
+    private async Task HandleValidSubmit()
+    {
+        //await BookingApiClient.UpdateFlightSeatBookingAsync(Booking);
+        Navigation.NavigateTo("/calendar");
+    }
+}

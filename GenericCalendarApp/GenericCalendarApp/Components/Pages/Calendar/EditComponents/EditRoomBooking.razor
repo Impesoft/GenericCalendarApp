@@ -2,6 +2,7 @@
 @using GenericCalendarApp.Services
 @inject NavigationManager Navigation
 @inject IBookingApiClient BookingApi
+@namespace GenericCalendarApp.Components.Pages.Calendar
 
 <h3>EditRoomBooking</h3>
 <EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit">
@@ -12,7 +13,7 @@
 </EditForm>
 
 @code {
-    [Parameter] public RoomBookingDto Booking { get; set; }
+    [Parameter] public RoomBookingDto Booking { get; set; } = default!;
 
     private async Task HandleValidSubmit()
     {

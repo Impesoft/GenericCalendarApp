@@ -22,8 +22,16 @@ public class GenericCalendarDbContext : DbContext
         modelBuilder.ApplyConfiguration(new SeatEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TeamMeetingEntityConfiguration());
         modelBuilder.ApplyConfiguration(new BookingEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new EquipmentEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ParkingSpotEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new InterviewSlotEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new SportsFieldEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new FlightSeatEntityConfiguration());
+
         base.OnModelCreating(modelBuilder);
 
+
+        //seeding
         var mainHallId = Guid.Parse("ed52fdcf-87fa-4f6d-ae09-b15419fecd72");
         var meetingRoomAId = Guid.Parse("c4f7a089-5bc6-43d0-b95d-739c2489ac4d");
         var seatA1Id = Guid.Parse("3a91263e-61a2-4b78-927f-01a8f331ec11");

@@ -1,6 +1,11 @@
 ﻿using GenericCalendar.Application.Bookings.BookItem;
+using GenericCalendar.Application.Bookings.EquipmentBooking;
+using GenericCalendar.Application.Bookings.FlightSeatBooking;
+using GenericCalendar.Application.Bookings.InterviewSlotBooking;
+using GenericCalendar.Application.Bookings.ParkingSpotBooking;
 using GenericCalendar.Application.Bookings.RoomBookings;
 using GenericCalendar.Application.Bookings.SeatBookings;
+using GenericCalendar.Application.Bookings.SportsFieldBooking;
 using GenericCalendar.Application.Bookings.TeamsMeetings;
 using GenericCalendar.Domain.Enums;
 using System.Net.Http.Json;
@@ -34,6 +39,13 @@ public class BookingApiClient : IBookingApiClient
             BookingType.Meeting => JsonSerializer.Deserialize<MeetingBookingDto>(content, options),
             BookingType.Seat => JsonSerializer.Deserialize<SeatBookingDto>(content, options),
             BookingType.Room => JsonSerializer.Deserialize<RoomBookingDto>(content, options),
+            //BookingType.None => JsonSerializer.Deserialize<BookingDto>(content, options),
+            BookingType.ParkingSpot => JsonSerializer.Deserialize<ParkingSpotBookingDto>(content, options),
+            BookingType.Equipment => JsonSerializer.Deserialize<EquipmentBookingDto>(content, options),
+            BookingType.FlightSeat => JsonSerializer.Deserialize<FlightSeatBookingDto>(content, options),
+            BookingType.InterviewSlot => JsonSerializer.Deserialize<InterviewSlotBookingDto>(content, options),
+            BookingType.SportsField => JsonSerializer.Deserialize<SportsFieldBookingDto>(content, options),
+
             _ => baseDto
         };
     }

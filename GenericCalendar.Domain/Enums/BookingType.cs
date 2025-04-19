@@ -8,7 +8,10 @@ public enum BookingType
     Equipment = 3,
     Meeting = 4,
     TeamsMeeting = 5,
-    Appointment = 6,
-    Flight = 7,
-    Custom = 8
+    InterviewSlot = 6,
+    FlightSeat = 7,
+    ParkingSpot = 8,
+    SportsField = 9,
+    Vehicle = 10,
+    Custom = 99
 }

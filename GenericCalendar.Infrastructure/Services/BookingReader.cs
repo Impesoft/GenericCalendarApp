@@ -96,10 +96,15 @@ public class BookingReader : IBookingReader
 
     private static string GetColor(BookingType type) => type switch
     {
-        BookingType.Room => "#0078D4",
-        BookingType.Seat => "#107C10",
-        BookingType.TeamsMeeting => "#D83B01",
-        BookingType.Appointment => "#5C2D91",
+        BookingType.Room => "#FF0000", // Bright Red
+        BookingType.Seat => "#00FF00", // Bright Green
+        BookingType.TeamsMeeting => "#0000FF", // Bright Blue
+        BookingType.Equipment => "#FFFF00", // Bright Yellow
+        BookingType.FlightSeat => "#FF00FF", // Bright Magenta
+        BookingType.InterviewSlot => "#00FFFF", // Bright Cyan
+        BookingType.ParkingSpot => "#FFA500", // Bright Orange
+        BookingType.SportsField => "#800080", // Bright Purple
+
         _ => "#8A8886"
     };
 }

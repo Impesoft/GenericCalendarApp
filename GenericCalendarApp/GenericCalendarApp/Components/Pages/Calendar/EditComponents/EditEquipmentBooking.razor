@@ -1,0 +1,28 @@
+@using GenericCalendar.Application.Bookings.EquipmentBooking
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApiClient
+@namespace GenericCalendarApp.Components.Pages.Calendar
+
+<h3>Edit Equipment Booking</h3>
+
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit" novalidate>
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentTextField Name="Title" @bind-Value="Booking.Title" Label="Title" />
+    <FluentTextField Name="SerialNumber" @bind-Value="Booking.SerialNumber" Label="Serial Number" />
+    <FluentTextField Name="EquipmentType" @bind-Value="Booking.EquipmentType" Label="Equipment Type" />
+    <FluentCheckbox Name="RequiresTraining" @bind-Value="Booking.RequiresTraining">Requires Training</FluentCheckbox>
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public EquipmentBookingDto Booking { get; set; } = default!;
+
+    private async Task HandleValidSubmit()
+    {
+        //await BookingApiClient.UpdateEquipmentBookingAsync(Booking);
+        Navigation.NavigateTo("/calendar");
+    }
+}

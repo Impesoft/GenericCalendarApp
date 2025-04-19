@@ -1,0 +1,27 @@
+@using GenericCalendar.Application.Bookings.InterviewSlotBooking
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApiClient
+@namespace GenericCalendarApp.Components.Pages.Calendar
+
+<h3>Edit Interview Slot Booking</h3>
+
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit" novalidate>
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentTextField Name="Title" @bind-Value="Booking.Title" Label="Title" />
+    <FluentTextField Name="Interviewer" @bind-Value="Booking.Interviewer" Label="Interviewer" />
+    <FluentTextField Name="CandidateEmail" @bind-Value="Booking.CandidateEmail" Label="Candidate Email" />
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public InterviewSlotBookingDto Booking { get; set; } = default!;
+
+    private async Task HandleValidSubmit()
+    {
+        //await BookingApiClient.UpdateInterviewSlotBookingAsync(Booking);
+        Navigation.NavigateTo("/calendar");
+    }
+}

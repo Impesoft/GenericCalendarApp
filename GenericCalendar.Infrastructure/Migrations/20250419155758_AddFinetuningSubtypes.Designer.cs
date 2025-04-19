@@ -3,6 +3,7 @@ using System;
 using GenericCalendar.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GenericCalendar.Infrastructure.Migrations
 {
     [DbContext(typeof(GenericCalendarDbContext))]
-    partial class GenericCalendarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250419155758_AddFinetuningSubtypes")]
+    partial class AddFinetuningSubtypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.0-preview.3.25171.6");

@@ -1,7 +1,6 @@
 ﻿namespace GenericCalendar.Domain.Entities;
 
-public class SeatEntity : BookableItemEntity
+public class SeatEntity : BaseSeatEntity
 {
-    public string Row { get; set; } = string.Empty;
-    public int Number { get; set; }
 }
+

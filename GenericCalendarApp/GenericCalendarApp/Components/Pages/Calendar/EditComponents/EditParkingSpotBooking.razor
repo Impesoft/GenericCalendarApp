@@ -1,0 +1,28 @@
+@using GenericCalendar.Application.Bookings.ParkingSpotBooking
+@using GenericCalendarApp.Services
+@inject NavigationManager Navigation
+@inject IBookingApiClient BookingApiClient
+@namespace GenericCalendarApp.Components.Pages.Calendar
+
+<h3>Edit Parking Spot Booking</h3>
+
+<EditForm Model="@Booking" OnValidSubmit="@HandleValidSubmit" novalidate>
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentTextField Name="Title" @bind-Value="Booking.Title" Label="Title" />
+    <FluentNumberField Name="SpotNumber" @bind-Value="Booking.SpotNumber" Label="Spot Number" />
+    <FluentTextField Name="Level" @bind-Value="Booking.Level" Label="Level" />
+    <FluentCheckbox Name="IsCovered" @bind-Value="Booking.IsCovered">Is Covered</FluentCheckbox>
+    <FluentButton Type="ButtonType.Submit">Save</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter] public ParkingSpotBookingDto Booking { get; set; } = default!;
+
+    private async Task HandleValidSubmit()
+    {
+        //await BookingApiClient.UpdateParkingSpotBookingAsync(Booking);
+        Navigation.NavigateTo("/calendar");
+    }
+}
